@@ -2,6 +2,8 @@
 
 Status date: 2026-11-11
 
+Permanent progress map: [PIZZETTA-PROGRESS-MAP-P0-P13.md](./PIZZETTA-PROGRESS-MAP-P0-P13.md)
+
 This is the delivery control document for the independent Pizzetta Kiosk system. It replaces assumptions from the earlier reference project and tracks what is implemented, what is partial, and the next acceptance gate.
 
 ## Current position
