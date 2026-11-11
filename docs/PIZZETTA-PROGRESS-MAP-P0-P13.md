@@ -44,7 +44,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` CASH/GCASH choice documented
 - `DONE` Confirmation boundary documented
 - `DONE` Frontend uses order-request endpoint
-- `NEXT` Schedule and table fields in checkout
+- `DONE` Schedule and table fields in checkout
 
 ### P4 — Non-functional requirements · `NEXT`
 
