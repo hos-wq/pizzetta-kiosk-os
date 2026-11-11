@@ -39,6 +39,61 @@
 @media(max-width:900px){.world-progress{display:none}.world-app .world-sidebar{background:var(--pw-paper);color:var(--pw-charcoal)}.world-app .world-sidebar>.world-kicker{display:none}.world-app .world-sidebar>button{min-height:44px;color:var(--pw-muted);background:color-mix(in srgb,var(--pw-yellow) 34%,var(--pw-paper))}.world-app .world-sidebar>button.selected{background:var(--pw-orange);color:var(--pw-paper)}}
 .world-app .world-product{cursor:pointer;transition:transform .18s ease}
 .world-app .world-product:hover{transform:translateY(-3px)}
+.world-app{overflow-x:hidden}
+@media(max-width:430px){
+  .world-app{padding-bottom:92px}
+  .world-app .world-header{height:68px;padding:0 14px;gap:10px;box-shadow:0 3px 0 color-mix(in srgb,var(--pw-yellow) 22%,transparent)}
+  .world-app .world-brand img{width:78px;height:42px}
+  .world-header-center{min-width:0;font-size:10px;line-height:1.2}
+  .world-header-center>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .world-cart-chip{width:34px;height:34px;flex:0 0 auto}
+  .world-gate,.placed-page{min-height:calc(100svh - 68px);padding:48px 16px 36px}
+  .gate-copy h1,.placed-page h1{font-size:52px}
+  .gate-copy p,.checkout-lede{font-size:14px;line-height:1.5}
+  .branch-picker{grid-template-columns:1fr;gap:10px;margin-top:24px}
+  .branch-picker button{min-height:0;padding:14px;border-radius:14px}
+  .service-cards{gap:10px;margin-top:28px}
+  .service-cards>button{padding:15px;border-radius:14px}
+  .service-glyph{width:44px;height:44px;flex:0 0 auto}
+  .identity-gate{padding-top:58px}
+  .identity-actions{gap:10px;margin-top:30px}
+  .wide-action{padding:14px;border-radius:14px}
+  .world-app .world-sidebar{position:sticky;top:68px;z-index:8;gap:6px;padding:8px 12px;box-shadow:0 3px 0 color-mix(in srgb,var(--pw-yellow) 20%,transparent)}
+  .world-app .world-sidebar>button{min-height:40px;padding:9px 12px;border-radius:11px;font-size:11px;white-space:nowrap}
+  .world-app .world-canvas{padding:28px 14px 24px}
+  .menu-intro{gap:8px;align-items:flex-end}
+  .menu-intro h1{font-size:40px}
+  .menu-intro p{font-size:12px}
+  .menu-rule{font-size:9px;padding-bottom:5px}
+  .world-grid{gap:12px;margin-top:20px}
+  .world-app .world-product{min-height:0;border-radius:14px}
+  .product-visual{height:116px}
+  .world-app .product-visual svg{width:64px;height:64px}
+  .product-info{gap:6px;padding:14px 12px 6px}
+  .product-info h2{font-size:15px}
+  .product-info p{font-size:10px;line-height:1.35}
+  .product-price{font-size:18px}
+  .size-toggle{padding:6px 12px}
+  .size-toggle button{padding:6px 7px;font-size:9px}
+  .product-add{margin:8px 10px 10px;padding:10px;border-radius:10px;font-size:11px}
+  .world-app .world-footer{gap:9px;padding:10px 12px;border-radius:15px 15px 0 0}
+  .footer-cart-icon{width:36px;height:36px;flex:0 0 auto}
+  .footer-cart-copy strong{font-size:12px}
+  .footer-checkout{padding:12px 13px;border-radius:10px;font-size:12px}
+  .checkout-page{gap:20px;padding:34px 16px 28px}
+  .checkout-main h1{font-size:46px}
+  .checkout-lines{margin-top:28px}
+  .checkout-line{gap:9px;padding:13px 0}
+  .checkout-line-copy strong{font-size:12px}
+  .checkout-line-copy small{font-size:10px}
+  .checkout-total{margin:24px 0}
+  .checkout-aside{gap:10px}
+  .aside-card{padding:16px;border-radius:14px}
+  .detail-backdrop{padding:12px}
+  .detail-card{max-height:calc(100svh - 24px);overflow:auto;padding:20px;border-radius:16px}
+  .detail-art{width:76px;height:76px;margin-bottom:16px}
+  .detail-card h2{font-size:32px}
+}
 .detail-backdrop{position:fixed;z-index:40;inset:0;display:grid;place-items:center;padding:20px;background:#24221fcc}
 .detail-card{position:relative;width:min(620px,100%);max-height:min(760px,calc(100vh - 40px));overflow:auto;padding:28px;background:var(--pw-paper);color:var(--pw-charcoal);border-radius:22px}
 .detail-close{position:absolute;right:15px;top:15px;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:12px;background:var(--pw-yellow);color:var(--pw-charcoal);cursor:pointer}
