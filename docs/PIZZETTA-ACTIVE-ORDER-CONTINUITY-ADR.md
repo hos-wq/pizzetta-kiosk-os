@@ -2,7 +2,7 @@
 
 ## Decision
 
-Active order continuity will use a Worker-issued `HttpOnly`, `Secure`, `SameSite=Lax` cookie scoped to the order-request/tracking paths. The browser must recover the active request after reload without exposing the bearer token to JavaScript storage.
+Active order continuity will use a Worker-issued `HttpOnly`, `Secure`, `SameSite=Lax` cookie with a seven-day lifetime. The browser must recover the active request after reload without exposing the bearer token to JavaScript storage. This covers long kitchen delays and advance reservations; the request record itself must use a matching scheduled-order expiry policy.
 
 ## Rejected shortcut
 
