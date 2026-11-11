@@ -28,8 +28,8 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Menu categories and requested item order
 - `DONE` 14″ and tray prices
 - `DONE` 8″ prices
-- `WIP` Thin Crust ingredients/allergens and activation
-- `NEXT` Complete authoritative allergen review
+- `DONE` Thin Crust ingredients/allergens and activation
+- `NEXT` Complete authoritative allergen review for remaining menu items
 
 ### P2 — Service blueprint · `DONE`
 
