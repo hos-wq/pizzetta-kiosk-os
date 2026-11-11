@@ -15,5 +15,6 @@
     "apps/worker/src/pizzetta-index.ts",
     "apps/worker/src/pizzetta-index-v2.ts",
     "apps/worker/src/pizzetta-index-v3.ts"
+    ,"apps/worker/src/pizzetta-assignment.ts"
   ]
 }

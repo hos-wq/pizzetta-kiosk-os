@@ -36,6 +36,9 @@ export const orderLineSchema = z.object({
 
 export const orderRequestSchema = z.object({
   branchId: z.string().min(1).max(100).optional(),
+  latitude: z.number().finite().gte(-90).lte(90).optional(),
+  longitude: z.number().finite().gte(-180).lte(180).optional(),
+  locationAccuracyMeters: z.number().finite().nonnegative().max(100000).optional(),
   customerId: z.string().min(1).max(100).optional(),
   customerName: z.string().trim().min(2).max(80),
   whatsapp: z.string().trim().regex(/^[+0-9][0-9 ()-]{6,31}$/),

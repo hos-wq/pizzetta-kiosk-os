@@ -1,6 +1,7 @@
 import baseWorker from './pizzetta-index-v2'
 import { authRoute, passwordAuthRoute, staffSession } from './pizzetta-auth'
 import { orderRequestSchema } from '../../../packages/contracts/src/index'
+import { chooseBranch, type AssignmentCandidate } from './pizzetta-assignment'
 
 type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 
@@ -19,6 +20,19 @@ async function validateOrderPayload(request: Request): Promise<Request | Respons
   const headers = new Headers(request.headers)
   headers.delete('content-length')
   return new Request(request, { headers, body: JSON.stringify(parsed.data) })
+}
+
+async function assignOrderBranch(request: Request, env: Env): Promise<Request | Response> {
+  const path = new URL(request.url).pathname
+  if (request.method !== 'POST' || (path !== '/api/orders' && path !== '/api/order-requests')) return request
+  const payload = await request.json() as Record<string, unknown>
+  const rows = await env.DB.prepare(`SELECT b.id,b.name,b.latitude,b.longitude,COALESCE(bo.wait_minutes,0) AS wait_minutes,COALESCE(bo.orders_paused,0) AS orders_paused FROM branches b LEFT JOIN branch_operations bo ON bo.branch_id=b.id WHERE b.is_active=1`).all<AssignmentCandidate>()
+  let selected: ReturnType<typeof chooseBranch>
+  try { selected = chooseBranch({ latitude: typeof payload.latitude === 'number' ? payload.latitude : undefined, longitude: typeof payload.longitude === 'number' ? payload.longitude : undefined, requestedBranchId: typeof payload.branchId === 'string' ? payload.branchId : undefined }, rows.results) } catch (error) { return new Response(JSON.stringify({ error: { code: 'NO_BRANCH_AVAILABLE', message: error instanceof Error ? error.message : 'No branch is available.' } }), { status: 409, headers: { 'content-type': 'application/json; charset=utf-8' } }) }
+  payload.branchId = selected.id
+  const headers = new Headers(request.headers)
+  headers.delete('content-length')
+  return new Request(request, { headers, body: JSON.stringify(payload) })
 }
 
 async function appShell(request: Request, env: Env, manifest: '/manifest-client.webmanifest' | '/manifest-restaurant.webmanifest') {
@@ -44,7 +58,9 @@ export default {
     if (loyalty) return loyalty
     const validatedPayload = await validateOrderPayload(request)
     if (validatedPayload instanceof Response) return validatedPayload
-    request = validatedPayload
+    const assignedRequest = await assignOrderBranch(validatedPayload, env)
+    if (assignedRequest instanceof Response) return assignedRequest
+    request = assignedRequest
     if (request.method === 'POST' && path === '/api/order-requests') { const customerId = await authenticatedCustomerId(request, env); if (customerId) { const payload = await request.json() as Record<string, unknown>; payload.customerId = customerId; const headers = new Headers(request.headers); headers.delete('content-length'); request = new Request(request, { headers, body: JSON.stringify(payload) }) } }
     const auth = await authRoute(request, env, path)
     if (auth) return auth
