@@ -1,22 +1,11 @@
 import baseWorker from './pizzetta-index-v2'
 import { authRoute, passwordAuthRoute, staffSession } from './pizzetta-auth'
 
-type Env = { DB: D1Database; ASSETS: Fetcher; PAYMENT_PROOFS?: R2Bucket; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
+type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 
 const customerCookie = (request: Request) => request.headers.get('cookie')?.split(';').map(value => value.trim()).find(value => value.startsWith('pizzetta_session='))?.slice('pizzetta_session='.length) ?? null
 const digestValue = async (value: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))).map(byte => byte.toString(16).padStart(2, '0')).join('')
-async function customerLoyaltyRoute(request: Request, env: Env, path: string) { if (path !== '/api/customer/loyalty' || request.method !== 'GET') return null; const session = customerCookie(request); if (!session) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const auth = await env.DB.prepare('SELECT subject_id FROM auth_sessions WHERE token_hash=? AND subject_type=\'CUSTOMER\' AND revoked_at IS NULL AND expires_at>?').bind(await digestValue(session), new Date().toISOString()).first<{ subject_id: string }>(); if (!auth) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const loyalty = await env.DB.prepare('SELECT points_balance,lifetime_points,tier FROM loyalty_accounts WHERE customer_id=?').bind(auth.subject_id).first(); return new Response(JSON.stringify({ data: loyalty ?? { points_balance: 0, lifetime_points: 0, tier: 'starter' } }), { headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } }) }
-
-async function paymentProofRoute(request: Request, env: Env, path: string) {
-  const match = path.match(/^\/api\/orders\/([^/]+)\/payment-proof$/)
-  if (!match || request.method !== 'POST') return null
-  if (!env.PAYMENT_PROOFS) return new Response(JSON.stringify({ error: { code: 'STORAGE_NOT_CONFIGURED', message: 'Payment proof storage is not configured.' } }), { status: 503, headers: { 'content-type': 'application/json' } })
-  const accessToken = request.headers.get('x-order-access-token')
-  const order = await env.DB.prepare('SELECT id FROM orders WHERE (id=? OR order_number=?) AND access_token_hash=?').bind(decodeURIComponent(match[1]), decodeURIComponent(match[1]), await crypto.subtle.digest('SHA-256', new TextEncoder().encode(accessToken ?? '')).then(bytes => Array.from(new Uint8Array(bytes)).map(value => value.toString(16).padStart(2, '0')).join(''))).first<{ id: string }>()
-  if (!order) return new Response(JSON.stringify({ error: { code: 'ORDER_ACCESS_DENIED', message: 'Order access denied.' } }), { status: 403, headers: { 'content-type': 'application/json' } })
-  const form = await request.formData(); const file = form.get('file'); const reference = String(form.get('reference') ?? '').trim(); if (!(file instanceof File) || !file.type.startsWith('image/') || file.size < 1 || file.size > 5 * 1024 * 1024) return new Response(JSON.stringify({ error: { code: 'INVALID_PAYMENT_PROOF', message: 'Upload an image up to 5 MB.' } }), { status: 400, headers: { 'content-type': 'application/json' } })
-  const objectKey = `payment-proofs/${order.id}/${crypto.randomUUID()}-${file.name.replace(/[^a-z0-9._-]/gi, '_')}`; await env.PAYMENT_PROOFS.put(objectKey, file.stream(), { httpMetadata: { contentType: file.type } }); await env.DB.prepare(`INSERT INTO payment_proofs (id,order_id,object_key,mime_type,byte_size,reference,status) VALUES (?,?,?,?,?,?, 'SUBMITTED')`).bind(crypto.randomUUID(), order.id, objectKey, file.type, file.size, reference || null).run(); return new Response(JSON.stringify({ data: { order_id: order.id, status: 'SUBMITTED' } }), { status: 201, headers: { 'content-type': 'application/json' } })
-}
+async function customerLoyaltyRoute(request: Request, env: Env, path: string) { if (path !== '/api/customer/loyalty' || request.method !== 'GET') return null; const session = customerCookie(request); if (!session) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const auth = await env.DB.prepare('SELECT subject_id FROM auth_sessions WHERE token_hash=? AND subject_type=\'CUSTOMER\' AND revoked_at IS NULL AND expires_at>?').bind(await digestValue(session), new Date().toISOString()).first<{ subject_id: string }>(); if (!auth) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const loyalty = await env.DB.prepare('SELECT points_balance,lifetime_points,rewards_available,tier FROM loyalty_accounts WHERE customer_id=?').bind(auth.subject_id).first(); return new Response(JSON.stringify({ data: loyalty ?? { points_balance: 0, lifetime_points: 0, rewards_available: 0, tier: 'starter' } }), { headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } }) }
 
 async function appShell(request: Request, env: Env, manifest: '/manifest-client.webmanifest' | '/manifest-restaurant.webmanifest') {
   const response = await env.ASSETS.fetch(new Request(new URL('/', request.url), request))
@@ -39,8 +28,6 @@ export default {
     if (passwordAuth) return passwordAuth
     const loyalty = await customerLoyaltyRoute(request, env, path)
     if (loyalty) return loyalty
-    const paymentProof = await paymentProofRoute(request, env, path)
-    if (paymentProof) return paymentProof
     const auth = await authRoute(request, env, path)
     if (auth) return auth
     const session = await staffSession(request, env)

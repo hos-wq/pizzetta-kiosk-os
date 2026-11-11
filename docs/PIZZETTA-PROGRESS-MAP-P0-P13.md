@@ -42,6 +42,7 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 
 - `DONE` Name and WhatsApp requirement documented
 - `DONE` CASH/GCASH choice documented
+- `DONE` Payment collected at branch; no online payment or receipt upload
 - `DONE` Confirmation boundary documented
 - `DONE` Frontend uses order-request endpoint
 - `DONE` Schedule and table fields in checkout
@@ -72,7 +73,8 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Loyalty point award trigger on completed authenticated orders
 - `DONE` Authenticated loyalty read endpoint
 - `DONE` Customer loyalty card in active-order tracking
-- `WIP` Loyalty redemption and 3-point award UX
+- `DONE` Three-stamp reward unlock mechanics
+- `WIP` Loyalty reward redemption UX
 
 ### P7 — Order state machine · `DONE`
 
