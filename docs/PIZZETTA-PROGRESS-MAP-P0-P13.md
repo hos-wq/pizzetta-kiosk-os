@@ -102,7 +102,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Client and staff WAP shells
 - `DONE` Item detail cards with ingredients/allergens
 - `DONE` Receipt and request-waiting UI
-- `WIP` Customer timeline/map/tracking surface
+- `DONE` Customer timeline/map/tracking surface
 - `DONE` GPS distance and pickup map link
 
 ### P11 — Delivery and environments · `WIP`
