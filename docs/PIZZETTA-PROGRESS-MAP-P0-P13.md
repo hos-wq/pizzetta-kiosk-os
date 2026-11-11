@@ -118,7 +118,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Web build
 - `DONE` Live health/menu smoke tests
 - `DONE` Migration verification
-- `WIP` API contract tests
+- `DONE` API contract smoke tests
 - `NEXT` End-to-end customer/staff test matrix
 
 ### P13 — Operations · `WIP`
