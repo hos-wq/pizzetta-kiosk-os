@@ -92,9 +92,9 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 
 - `DONE` Role matrix: ADMIN, MANAGER, CASHIER, CUSTOMER, GUEST
 - `DONE` Staff session login
-- `WIP` Server-side capability enforcement by role
-- `NEXT` Manager-only operations enforcement
-- `NEXT` Cashier-only order dispatch enforcement
+- `DONE` Server-side capability enforcement by role
+- `DONE` Manager/Admin-only operations enforcement
+- `DONE` Cashier/Manager/Admin order dispatch enforcement
 
 ### P10 — UX and design system · `WIP`
 
