@@ -16,7 +16,7 @@
 | E12 | Customer waits for confirmation | Waiting state polls without exposing token | READY |
 | E13 | Staff advances order | Customer timeline updates | READY |
 | E14 | Staff sends stale version | 409 conflict, no silent overwrite | READY |
-| E15 | Guest reloads tracking view | Active request/order can be recovered | BLOCKED UNTIL COOKIE SLICE |
+| E15 | Guest reloads tracking view | Active request/order can be recovered | READY |
 | E16 | Cashier attempts branch operations | Must be rejected server-side | NEXT |
 | E17 | iPhone VoiceOver checkout | All controls have meaningful labels | NEXT |
 | E18 | Offline/timeout retry | Same request key survives retry | NEXT |

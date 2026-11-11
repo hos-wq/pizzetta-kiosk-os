@@ -18,4 +18,4 @@ Do not store order/request access tokens in `localStorage`, `sessionStorage`, In
 
 ## E15 status
 
-`BLOCKED UNTIL COOKIE SLICE` — the current app intentionally does not persist bearer tokens in browser storage.
+`IMPLEMENTED` — the Worker issues an HttpOnly cookie and the client stores only the opaque request ID in application state.
