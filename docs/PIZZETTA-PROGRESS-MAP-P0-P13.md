@@ -85,7 +85,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Direct order endpoint
 - `DONE` Order-request creation endpoint
 - `DONE` Staff request confirmation endpoint
-- `WIP` Staff request queue endpoint/UI
+- `DONE` Staff request queue endpoint/UI
 - `NEXT` Customer request status polling
 
 ### P9 — Authorization · `WIP`
