@@ -43,6 +43,7 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Name and WhatsApp requirement documented
 - `DONE` CASH/GCASH choice documented
 - `DONE` Payment collected at branch; no online payment or receipt upload
+- `DONE` Loyalty validation minimum: ₱299 subtotal per completed order
 - `DONE` Confirmation boundary documented
 - `DONE` Frontend uses order-request endpoint
 - `DONE` Schedule and table fields in checkout
@@ -75,7 +76,8 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Customer loyalty card in active-order tracking
 - `DONE` Three-stamp reward unlock mechanics
 - `DONE` Active-order reward availability banner
-- `WIP` Loyalty reward redemption UX
+- `DONE` Reward catalog: 3rd 15%, 6th 30%, 9th free 8″ classic, 12th free 14″ classic
+- `WIP` Loyalty reward redemption UX at cashier
 
 ### P7 — Order state machine · `DONE`
 
