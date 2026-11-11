@@ -1,0 +1,13 @@
+{
+  "name": "Pizzetta Kiosk · Order",
+  "short_name": "Pizzetta",
+  "id": "/client",
+  "start_url": "/client",
+  "scope": "/client",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FEF7E0",
+  "theme_color": "#E15603",
+  "description": "Order Pizzetta for dine-in or pickup.",
+  "icons": [{ "src": "/brand/pizzetta-logo-paper-border.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

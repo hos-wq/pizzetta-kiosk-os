@@ -1,0 +1,13 @@
+{
+  "name": "Pizzetta Operations",
+  "short_name": "Pizzetta Ops",
+  "id": "/restaurant",
+  "start_url": "/restaurant",
+  "scope": "/restaurant",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FEF7E0",
+  "theme_color": "#24221F",
+  "description": "Manage Pizzetta orders and service timing.",
+  "icons": [{ "src": "/brand/pizzetta-logo-paper-border.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
