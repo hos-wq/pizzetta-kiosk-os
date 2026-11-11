@@ -77,7 +77,8 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Three-stamp reward unlock mechanics
 - `DONE` Active-order reward availability banner
 - `DONE` Reward catalog: 3rd 15%, 6th 30%, 9th free 8″ classic, 12th free 14″ classic
-- `WIP` Loyalty reward redemption UX at cashier
+- `DONE` Minimum qualifying subtotal enforced at ₱299
+- `WIP` Loyalty reward redemption UX at cashier, including classic-pizza selection for 9th/12th
 
 ### P7 — Order state machine · `DONE`
 
