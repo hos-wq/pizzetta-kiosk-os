@@ -1,5 +1,6 @@
 import baseWorker from './pizzetta-index-v2'
 import { authRoute, passwordAuthRoute, staffSession } from './pizzetta-auth'
+import { orderRequestSchema } from '../../../packages/contracts/src/index'
 
 type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 
@@ -7,6 +8,18 @@ const customerCookie = (request: Request) => request.headers.get('cookie')?.spli
 const digestValue = async (value: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))).map(byte => byte.toString(16).padStart(2, '0')).join('')
 async function authenticatedCustomerId(request: Request, env: Env) { const session = customerCookie(request); if (!session) return null; const auth = await env.DB.prepare("SELECT subject_id FROM auth_sessions WHERE token_hash=? AND subject_type='CUSTOMER' AND revoked_at IS NULL AND expires_at>?").bind(await digestValue(session), new Date().toISOString()).first<{ subject_id: string }>(); return auth?.subject_id ?? null }
 async function customerLoyaltyRoute(request: Request, env: Env, path: string) { if (path !== '/api/customer/loyalty' || request.method !== 'GET') return null; const session = customerCookie(request); if (!session) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const auth = await env.DB.prepare('SELECT subject_id FROM auth_sessions WHERE token_hash=? AND subject_type=\'CUSTOMER\' AND revoked_at IS NULL AND expires_at>?').bind(await digestValue(session), new Date().toISOString()).first<{ subject_id: string }>(); if (!auth) return new Response(JSON.stringify({ error: { code: 'CUSTOMER_AUTH_REQUIRED', message: 'Customer sign-in required.' } }), { status: 401, headers: { 'content-type': 'application/json' } }); const loyalty = await env.DB.prepare('SELECT points_balance,lifetime_points,rewards_available,tier FROM loyalty_accounts WHERE customer_id=?').bind(auth.subject_id).first(); const rewards = await env.DB.prepare("SELECT reward_code,milestone,status,created_at FROM loyalty_rewards WHERE loyalty_account_id=(SELECT id FROM loyalty_accounts WHERE customer_id=?) ORDER BY milestone").bind(auth.subject_id).all(); return new Response(JSON.stringify({ data: { ...(loyalty ?? { points_balance: 0, lifetime_points: 0, rewards_available: 0, tier: 'starter' }), rewards: rewards.results } }), { headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } }) }
+
+async function validateOrderPayload(request: Request): Promise<Request | Response> {
+  const path = new URL(request.url).pathname
+  if (request.method !== 'POST' || (path !== '/api/orders' && path !== '/api/order-requests')) return request
+  let payload: unknown
+  try { payload = await request.json() } catch { return new Response(JSON.stringify({ error: { code: 'INVALID_JSON', message: 'Request body must be valid JSON.' } }), { status: 400, headers: { 'content-type': 'application/json; charset=utf-8' } }) }
+  const parsed = orderRequestSchema.safeParse(payload)
+  if (!parsed.success) return new Response(JSON.stringify({ error: { code: 'INVALID_ORDER_REQUEST', message: 'Order payload failed validation.', issues: parsed.error.issues } }), { status: 400, headers: { 'content-type': 'application/json; charset=utf-8' } })
+  const headers = new Headers(request.headers)
+  headers.delete('content-length')
+  return new Request(request, { headers, body: JSON.stringify(parsed.data) })
+}
 
 async function appShell(request: Request, env: Env, manifest: '/manifest-client.webmanifest' | '/manifest-restaurant.webmanifest') {
   const response = await env.ASSETS.fetch(new Request(new URL('/', request.url), request))
@@ -29,6 +42,9 @@ export default {
     if (passwordAuth) return passwordAuth
     const loyalty = await customerLoyaltyRoute(request, env, path)
     if (loyalty) return loyalty
+    const validatedPayload = await validateOrderPayload(request)
+    if (validatedPayload instanceof Response) return validatedPayload
+    request = validatedPayload
     if (request.method === 'POST' && path === '/api/order-requests') { const customerId = await authenticatedCustomerId(request, env); if (customerId) { const payload = await request.json() as Record<string, unknown>; payload.customerId = customerId; const headers = new Headers(request.headers); headers.delete('content-length'); request = new Request(request, { headers, body: JSON.stringify(payload) }) } }
     const auth = await authRoute(request, env, path)
     if (auth) return auth

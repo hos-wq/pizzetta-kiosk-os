@@ -26,4 +26,11 @@ describe('P0 Pizzetta repository boundary', () => {
     expect(existsSync(resolve(root, 'legacy-reference/archive/UI'))).toBe(true)
     expect(existsSync(resolve(root, 'legacy-reference/archive/tests'))).toBe(true)
   })
+
+  it('keeps the canonical Pizzetta contract package free of property-domain schemas', () => {
+    const contracts = readFileSync(resolve(root, 'packages/contracts/src/index.ts'), 'utf8')
+    expect(contracts).toContain('orderRequestSchema')
+    expect(contracts).toContain('branchOperationPatchSchema')
+    expect(contracts).not.toMatch(/tenancy|maintenance|room_id|unit_id|rent/i)
+  })
 })

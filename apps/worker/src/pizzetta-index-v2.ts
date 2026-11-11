@@ -1,6 +1,7 @@
 import { authRoute } from './pizzetta-auth'
+import { branchOperationPatchSchema, orderRequestSchema, orderStatusPatchSchema, type OrderRequestInput as CanonicalOrderRequestInput } from '../../../packages/contracts/src/index'
 type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
-type OrderInput = { branchId?: string; customerId?: string; customerName?: string; whatsapp?: string; idempotencyKey?: string; accessToken?: string; accessTokenHash?: string; serviceMode: 'DINE_IN' | 'PICKUP'; scheduledFor?: string; tableLabel?: string; notes?: string; paymentMethod?: 'CASH' | 'GCASH'; items: { menuItemId: string; variantLabel?: string; quantity: number; notes?: string }[] }
+type OrderInput = CanonicalOrderRequestInput
 type StaffRole = 'ADMIN' | 'MANAGER' | 'CASHIER'
 const id = () => crypto.randomUUID(); const token = () => `${crypto.randomUUID()}${crypto.randomUUID()}`; const orderNumber = () => `P-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
 const hash = async (value: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))).map(value => value.toString(16).padStart(2, '0')).join('')
