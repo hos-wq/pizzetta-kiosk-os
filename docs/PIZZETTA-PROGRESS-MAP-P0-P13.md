@@ -70,6 +70,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` `order_requests` boundary
 - `WIP` Request confirmation audit events
 - `DONE` Loyalty point award trigger on completed authenticated orders
+- `DONE` Authenticated loyalty read endpoint
 - `WIP` Loyalty redemption and 3-point award UX
 
 ### P7 — Order state machine · `DONE`
