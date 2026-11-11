@@ -1,4 +1,5 @@
-type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string }
+import { authRoute } from './pizzetta-auth'
+type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 type OrderInput = { branchId?: string; customerId?: string; serviceMode: 'DINE_IN' | 'PICKUP'; scheduledFor?: string; tableLabel?: string; notes?: string; paymentMethod?: 'CASH' | 'GCASH'; items: { menuItemId: string; variantLabel?: string; quantity: number; notes?: string }[] }
 type StaffRole = 'ADMIN' | 'MANAGER' | 'CASHIER'
 const id = () => crypto.randomUUID(); const token = () => `${crypto.randomUUID()}${crypto.randomUUID()}`; const orderNumber = () => `P-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`
