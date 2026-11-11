@@ -6,6 +6,8 @@ type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIEN
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const path = new URL(request.url).pathname.replace(/\/$/, '')
+    if (request.method === 'GET' && path === '/privacy') return env.ASSETS.fetch(new Request(new URL('/privacy.html', request.url), request))
+    if (request.method === 'GET' && path === '/data-deletion') return env.ASSETS.fetch(new Request(new URL('/data-deletion.html', request.url), request))
     const passwordAuth = await passwordAuthRoute(request, env, path)
     if (passwordAuth) return passwordAuth
     const auth = await authRoute(request, env, path)

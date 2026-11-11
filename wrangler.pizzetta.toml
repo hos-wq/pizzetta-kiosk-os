@@ -5,6 +5,10 @@ compatibility_date = "2026-10-05"
 [vars]
 ENVIRONMENT = "local"
 PIZZETTA_OWNER_EMAIL = "otherbadhabits.makati@gmail.com"
+GOOGLE_CLIENT_ID = "642194379481-3dlj9q9n12mjn8lldipp1d4tsoqiucsm.apps.googleusercontent.com"
+META_APP_ID = "1106040422306141"
+META_GRAPH_VERSION = "v24.0"
+PUBLIC_ORIGIN = "https://pizzetta-kiosk-os.pizzetta-kiosk.workers.dev"
 
 [assets]
 directory = "apps/web/dist"
