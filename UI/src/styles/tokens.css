@@ -1,0 +1,220 @@
+:root {
+  /* PIZZETTA BrandVault: hybrid_approved brand tokens. */
+  --pz-palette-paper: #FEF7E0;
+  --pz-palette-charcoal: #24221F;
+  --pz-palette-orange: #E15603;
+  --pz-palette-yellow: #FDC500;
+  --pz-palette-dough-cream: #E8C99F;
+  --pz-palette-salad-green: #26734A;
+  --pz-palette-ragu-red: #963D2C;
+  --pz-palette-tropical-tea: #A94F21;
+
+  /* PIZZETTA surface and text rules. */
+  --pz-surface-paper: var(--pz-palette-paper);
+  --pz-surface-charcoal: var(--pz-palette-charcoal);
+  --pz-surface-orange: var(--pz-palette-orange);
+  --pz-surface-yellow: var(--pz-palette-yellow);
+  /* Held back from active backgrounds; use only for future narrow inactive states. */
+  --pz-surface-dough-inactive: var(--pz-palette-dough-cream);
+  --pz-text-on-light: var(--pz-palette-charcoal);
+  --pz-text-on-dark: var(--pz-palette-paper);
+  --pz-text-accent-orange: var(--pz-palette-orange);
+  --pz-text-accent-yellow: var(--pz-palette-yellow);
+
+  /* Category accents are semantic and must not be reused arbitrarily. */
+  --pz-category-salad: var(--pz-palette-salad-green);
+  --pz-category-lasagna: var(--pz-palette-ragu-red);
+  --pz-category-pasta: var(--pz-palette-yellow);
+  --pz-category-tea: var(--pz-palette-tropical-tea);
+
+  /* Compatibility names retained while the copied BR components are migrated. */
+  --br-palette-canvas: var(--pz-palette-paper);
+  --br-palette-surface: #FFFDF5;
+  --br-palette-porcelain: var(--pz-palette-dough-cream);
+  --br-palette-soft-rose: #F7E7C7;
+  --br-palette-quartz: var(--pz-palette-orange);
+  --br-palette-quartz-soft: var(--pz-palette-yellow);
+  --br-palette-rosewood: var(--pz-palette-ragu-red);
+  --br-palette-ink: var(--pz-palette-charcoal);
+  --br-palette-muted: #74695E;
+  --br-palette-neutral-stroke: #DCCEBB;
+
+  /* Compatibility aliases retained for existing component APIs. */
+  --br-palette-charcoal: var(--br-palette-ink);
+  --br-palette-brass: var(--br-palette-quartz);
+  --br-palette-mocha: var(--br-palette-rosewood);
+  --br-palette-sage: var(--pz-palette-salad-green);
+  --br-palette-amaranto: var(--br-palette-rosewood);
+  --br-palette-mustard: var(--br-palette-quartz);
+
+  /* Semantic status colors are distinct from brand/selection colors. */
+  --br-palette-success: var(--pz-palette-salad-green);
+  --br-palette-pending: var(--pz-palette-yellow);
+  --br-palette-urgent: var(--pz-palette-ragu-red);
+  --br-palette-confirmed: var(--br-palette-success);
+  --br-palette-occupancy-occupied: #27834E;
+  --br-palette-occupancy-vacant: #C83E48;
+  --br-palette-occupancy-reserved: #C28A13;
+  --br-palette-occupancy-notice-given: #A7A044;
+  --br-palette-occupancy-turnover: #B87932;
+  --br-palette-occupancy-pre-leased: #5B9470;
+
+  /* Semantic aliases: components and specimens consume these roles. */
+  --br-color-canvas: var(--br-palette-canvas);
+  --br-color-surface: var(--br-palette-surface);
+  --br-color-porcelain: var(--br-palette-porcelain);
+  --br-color-soft-rose: var(--br-palette-soft-rose);
+  --br-color-quartz: var(--br-palette-quartz);
+  --br-color-quartz-soft: var(--br-palette-quartz-soft);
+  --br-color-rosewood: var(--br-palette-rosewood);
+  --br-color-ink: var(--br-palette-ink);
+  --br-color-neutral-stroke: var(--br-palette-neutral-stroke);
+  --br-color-active-text: var(--br-color-surface);
+  --br-color-charcoal: var(--br-palette-charcoal);
+  --br-color-brass: var(--br-palette-brass);
+  --br-color-mocha: var(--br-palette-mocha);
+  --br-color-sage: var(--br-palette-sage);
+  --br-color-amaranto: var(--br-palette-amaranto);
+  --br-color-mustard: var(--br-palette-mustard);
+  --br-color-muted: var(--br-palette-muted);
+  /* Legacy semantic roles now resolve through the approved visual language. */
+  --br-color-cheese-yellow: var(--br-color-quartz);
+  --br-color-royal-blue: var(--br-color-quartz);
+  --br-color-downy-blue: var(--br-color-sage);
+  --br-color-success: var(--br-palette-success);
+  --br-color-pending: var(--br-palette-pending);
+  --br-color-urgent: var(--br-palette-urgent);
+  --br-color-confirmed: var(--br-palette-confirmed);
+  --br-color-label: var(--br-color-charcoal);
+  --br-color-label-muted: var(--br-color-muted);
+  --br-color-status-text: var(--br-color-surface);
+  /* Statuses use a separate bright traffic-light palette, not BR OS accent colors. */
+  --br-color-status-available: var(--br-color-success);
+  --br-color-status-attention: var(--br-color-pending);
+  --br-color-status-active: var(--br-color-urgent);
+  --br-color-accordion-open: color-mix(in srgb, var(--br-color-mustard) 12%, var(--br-color-canvas));
+  --br-color-selection: var(--br-color-quartz-soft);
+  --br-color-selection-text: var(--br-color-ink);
+
+  --br-color-occupancy-occupied: var(--br-palette-occupancy-occupied);
+  --br-color-occupancy-vacant: var(--br-palette-occupancy-vacant);
+  --br-color-occupancy-reserved: var(--br-palette-occupancy-reserved);
+  --br-color-occupancy-notice-given: var(--br-palette-occupancy-notice-given);
+  --br-color-occupancy-turnover: var(--br-palette-occupancy-turnover);
+  --br-color-occupancy-pre-leased: var(--br-palette-occupancy-pre-leased);
+
+  /* Stored provisional label palette; final per-domain matrix remains external. */
+  --br-label-success-bg: #E1EDE3;
+  --br-label-success-text: #285A42;
+  --br-label-process-bg: #DCEAF8;
+  --br-label-process-text: #28577E;
+  --br-label-pending-bg: #E8E1F4;
+  --br-label-pending-text: #58447D;
+  --br-label-scheduled-bg: #DCEDEF;
+  --br-label-scheduled-text: #275C65;
+  --br-label-draft-bg: #EEE8E2;
+  --br-label-draft-text: #66574D;
+  --br-label-archive-bg: #E9E7EB;
+  --br-label-archive-text: #625D69;
+  --br-label-document-bg: #F1E2EA;
+  --br-label-document-text: #784B63;
+  --br-label-follow-up-bg: #F5E4D4;
+  --br-label-follow-up-text: #865322;
+  --br-label-problem-bg: #F4DDDF;
+  --br-label-problem-text: #853942;
+
+  /* DS-061 high-attention labels: exact approved colors, white foreground. */
+  --br-label-clear-bg: #20784B;
+  --br-label-caution-bg: #946000;
+  --br-label-critical-bg: #B52F37;
+  --br-label-attention-text: #FFFFFF;
+
+  /* System UI typography; exact metrics remain subject to device QA. */
+  /* PIZZETTA type contract: Fraunces / Nunito / Poppins / Sour Gummy. */
+  --pz-font-display: "Pizzetta Fraunces", Georgia, serif;
+  --pz-font-heading: "Pizzetta Fredoka", "Arial Rounded MT Bold", sans-serif;
+  --pz-font-body: "Pizzetta Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pz-font-promo: "Pizzetta Sour Gummy Black", "Arial Rounded MT Bold", sans-serif;
+  --br-font-body: var(--pz-font-body);
+  --br-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --br-type-micro-size: 0.72rem;
+  --br-type-micro-line: 1.35;
+  --br-type-label-size: 0.8rem;
+  --br-type-label-weight: 700;
+  --br-type-label-spacing: 0.08em;
+  --br-type-navigation-size: clamp(0.5rem, 2vw, var(--br-type-micro-size));
+  --br-type-navigation-spacing: 0.02em;
+  --br-type-value-weight: 700;
+  --br-type-regular-weight: 400;
+  --br-type-medium-weight: 500;
+  --br-type-heading-weight: 800;
+  --br-type-display-weight: 900;
+  --br-type-body-size: 1rem;
+  --br-type-secondary-size: 0.9375rem;
+  --br-type-secondary-line: 1.45;
+  --br-type-tight-line: 1.1;
+  --br-type-display-line: 1.05;
+  --br-type-heading-line: 1.15;
+  --br-type-copy-line: 1.5;
+  --br-type-control-spacing: 0.04em;
+  --br-type-display-spacing: -0.04em;
+  --br-type-heading-spacing: -0.025em;
+  --br-type-value-spacing: -0.02em;
+  --br-type-state-size: 1.2rem;
+  --br-type-tabular: tabular-nums;
+
+  /* 4px base spacing, 20px mobile gutter, and working 10px control radius. */
+  --br-space-half: 0.125rem;
+  --br-space-1: 0.25rem;
+  --br-space-2: 0.5rem;
+  --br-space-3: 0.75rem;
+  --br-space-4: 1rem;
+  --br-space-5: 1.25rem;
+  --br-space-6: 1.5rem;
+  --br-space-8: 2rem;
+  --br-radius-sm: 0.375rem;
+  --br-radius-md: 0.625rem;
+  --br-radius-lg: 0.875rem;
+  --br-radius-pill: 999px;
+  --br-touch-min: 2.75rem;
+  --br-mobile-gutter: 1.25rem;
+  --br-control-sm: 2.75rem;
+  --br-control-md: 2.75rem;
+  --br-control-lg: 3.25rem;
+  --br-control-xl: 3.75rem;
+  --br-primary-button-height: 3.25rem;
+  --br-footer-tile-size: var(--br-touch-min);
+  --br-viewport-iphone-14-pro-width: 393px;
+  --br-viewport-iphone-14-pro-height: 852px;
+  --br-monique-bar-width: 4.75rem;
+  --br-monique-bar-height: var(--br-space-1);
+  --br-label-height: calc(var(--br-control-sm) / 2);
+  --br-card-height: 7rem;
+  --br-card-padding: var(--br-space-3);
+  --br-room-grid-columns: 1;
+  --br-room-card-image-ratio: 5 / 4;
+  --br-room-id-size: 1.25rem;
+  --br-card-grid-columns: minmax(0, 2fr) minmax(0, 3fr);
+  --br-card-grid-gap: var(--br-space-1);
+  --br-card-media-gutter: 0;
+  --br-card-content-gutter: var(--br-space-3);
+  --br-card-content-start-gutter: var(--br-space-1);
+  --br-grid-gap: var(--br-space-3);
+  --br-grid-inner-gap: var(--br-space-2);
+  --br-grid-card-columns: 1;
+  --br-grid-card-padding: var(--br-space-3);
+  --br-calendar-block-width: 100%;
+  --br-calendar-swipe-threshold: 2.75rem;
+  --br-calendar-day-ratio: 1 / 1;
+  --br-calendar-occupancy-color: var(--br-color-quartz);
+  --br-calendar-today-color: var(--br-color-rosewood);
+  --br-create-action-size: var(--br-touch-min);
+  --br-create-action-color: var(--br-color-quartz);
+  --br-radius-none: 0;
+  --br-motion-fast: 160ms;
+  --br-motion-layout: 180ms;
+  --br-toggle-thumb-size: 1.25rem;
+  --br-message-composer-radius: var(--br-radius-md);
+  --br-message-composer-row-height: var(--br-control-md);
+  --br-shadow-device: 0 1rem 3rem color-mix(in srgb, var(--br-color-ink) 16%, transparent);
+}

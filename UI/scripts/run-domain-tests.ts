@@ -1,0 +1,27 @@
+import { people, rooms, tasks } from '../src/fixtures.ts';
+import { adaptRoomFixture, DevelopmentRepository } from '../src/domain/fixtures.ts';
+import { projectCalendarEvents } from '../src/domain/selectors.ts';
+import { canTransitionOperationStatus, deriveContractStatus, derivePaymentStatus, hasDuplicateActiveOperation, validateDateOnly, validateTenancy, validateUtilityReadingChronology } from '../src/domain/validation.ts';
+import type { Operation, Tenancy } from '../src/domain/entities.ts';
+
+const assert = (condition: unknown, message: string) => { if (!condition) throw new Error(message); };
+const domainRooms = rooms.map(adaptRoomFixture);
+const operations = tasks.filter((task) => task.category !== 'MESSAGES').map((task) => ({ internalId: task.id, roomId: domainRooms.find((room) => room.publicId === task.room)?.internalId ?? '', category: task.category, object: task.object, action: task.action, priority: task.priority, status: task.status, source: 'DEVELOPMENT_FIXTURE' as const } satisfies Operation));
+const candidate = { roomId: 'room-BR·08', personIds: ['person-1'], startDate: '2026-10-12', endDate: '2026-10-11', status: 'ACTIVE' } satisfies Pick<Tenancy, 'roomId' | 'personIds' | 'startDate' | 'endDate' | 'status'>;
+assert(domainRooms.length === 10, 'All ten room fixtures must remain present.');
+assert(domainRooms.find((room) => room.publicId === 'BR·07')?.view === 'NO VIEW', 'BR·07 must retain NO VIEW.');
+assert(validateTenancy(candidate).some((error) => error.code === 'INVALID_DATE_RANGE'), 'Invalid tenancy ranges must be rejected.');
+assert(!validateDateOnly('2026-10-12', 'date'), 'Valid date-only values must remain valid.');
+assert(hasDuplicateActiveOperation(operations[0], operations), 'Duplicate active operations must be detected.');
+assert(!hasDuplicateActiveOperation({ ...operations[0], status: 'DONE' }, operations), 'Completed operations must follow the documented duplicate policy.');
+assert(canTransitionOperationStatus('IN PROGRESS', 'DONE'), 'Operations must allow completion.');
+assert(!canTransitionOperationStatus('DONE', 'PENDING'), 'Completed operations cannot regress.');
+assert(deriveContractStatus({ effectiveDate: '2026-01-01', expirationDate: '2026-12-31', status: 'ACTIVE' }, '2026-10-12') === 'ACTIVE', 'Contract lifecycle status must derive from effective dates.');
+assert(derivePaymentStatus({ dueDate: '2026-10-11', status: 'DUE' }, '2026-10-12') === 'OVERDUE', 'Payment status must derive overdue state.');
+assert(validateUtilityReadingChronology([{ internalId: 'r1', utilityAccountId: 'u1', readingDate: '2026-10-12', value: 2, unit: 'kWh', source: 'DEVELOPMENT_FIXTURE' }, { internalId: 'r2', utilityAccountId: 'u1', readingDate: '2026-10-11', value: 1, unit: 'kWh', source: 'DEVELOPMENT_FIXTURE' }]).length === 1, 'Utility reading chronology must be validated.');
+const repository = new DevelopmentRepository(rooms, people, tasks);
+const duplicateResult = await repository.createOperation(operations[0]);
+assert(!duplicateResult.ok && duplicateResult.error.code === 'CONFLICT', 'Development adapter must reject duplicate active operations.');
+const projectionOperations = [{ ...operations[0], createdAt: '2026-10-12T00:00:00Z' }, ...operations.slice(1)];
+assert(projectCalendarEvents({ rooms: domainRooms, people: [], tenancies: [], contracts: [], payments: [], operations: projectionOperations }).length === 1, 'Calendar projections must derive from authoritative records and preserve unknown dates.');
+console.log('DM-001 domain tests PASS: identity, validation, duplicate policy, adapter conflict and calendar projection checks passed.');

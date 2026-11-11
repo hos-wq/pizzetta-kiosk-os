@@ -1,0 +1,21 @@
+name = "pizzetta-kiosk-os"
+main = "apps/worker/src/pizzetta-index.ts"
+compatibility_date = "2026-10-05"
+
+[vars]
+ENVIRONMENT = "local"
+PIZZETTA_OWNER_EMAIL = "otherbadhabits.makati@gmail.com"
+
+[secrets]
+required = ["GOOGLE_CLIENT_SECRET", "AUTH_SESSION_SECRET"]
+
+[assets]
+directory = "apps/web/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pizzetta-kiosk-os"
+database_id = "5b442bf4-52e1-4677-b712-04a51e8dec6a"
+migrations_dir = "db/pizzetta-migrations"

@@ -1,0 +1,7 @@
+import { describe, expect, it } from 'vitest';
+import { recordCheckout } from '../../apps/worker/src/turnover';
+
+describe('V2.13F lifecycle integrity', () => {
+  it('rejects checkout at or before physical check-in', async () => { const repo = { async first(sql: string) { if (sql.includes('tenancies')) return { id: 't1', unit_id: 'BR·07', status: 'ACTIVE' }; if (sql.includes('tenancy_check_ins')) return { id: 'ci', actual_check_in_at: '2026-10-10T10:00:00Z' }; return null; }, async run() {}, async all() { return []; } }; await expect(recordCheckout(repo as never, 't1', { confirmed: true, actual_check_out_at: '2026-10-10T10:00:00Z' }, 'owner')).rejects.toMatchObject({ code: 'INVALID_CHECK_OUT_TIME' }); });
+  it('accepts a chronological checkout and uses one D1 batch when available', async () => { let batches = 0; const repo = { async first(sql: string) { if (sql.includes('tenancies')) return { id: 't1', unit_id: 'BR·07', status: 'ACTIVE' }; if (sql.includes('tenancy_check_ins')) return { id: 'ci', actual_check_in_at: '2026-10-10T10:00:00Z' }; if (sql.includes('tenancy_checkouts')) return null; if (sql.includes('FROM units')) return { id: 'BR·07' }; return null; }, async run() {}, async all() { return []; }, async batch() { batches += 1; } }; await recordCheckout(repo as never, 't1', { confirmed: true, actual_check_out_at: '2026-10-11T10:00:00Z' }, 'owner'); expect(batches).toBe(1); });
+});

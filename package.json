@@ -1,0 +1,41 @@
+{
+  "name": "pizzetta-kiosk-os",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "npm --prefix apps/web run build",
+    "lint": "npm --prefix apps/web run lint",
+    "worker-build": "wrangler deploy --dry-run",
+    "worker-typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": "true",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261005.1",
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.147.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20261001.1": true
+  },
+  "dependencies": {
+    "@block65/webcrypto-web-push": "^2.0.0",
+    "fast-fuzzy": "^1.12.0",
+    "motion": "^14.0.0",
+    "radix-ui": "^1.7.0",
+    "wink-nlp": "^2.4.0",
+    "zod": "^4.6.5"
+  }
+}

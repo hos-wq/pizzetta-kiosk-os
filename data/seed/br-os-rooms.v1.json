@@ -1,0 +1,38 @@
+{
+  "schema_version": "br-os-rooms.v1",
+  "effective_date": "2026-10-15",
+  "shared_amenities": {
+    "balcony": true,
+    "bed": { "size": "QUEEN", "quantity": 1 },
+    "dining_table": true,
+    "dining_set": true,
+    "refrigerator_freezer": true,
+    "microwave": true,
+    "electric_kettle": true,
+    "hot_cold_shower": true,
+    "bidet": true,
+    "in_room_safe": true,
+    "smart_tv": true,
+    "air_conditioner": { "type": "WINDOW", "inverter": true },
+    "black_curtains": true,
+    "wardrobe": true,
+    "universal_sockets": true,
+    "usb_connectivity": true
+  },
+  "buildings": [
+    { "key": "MAKATI_PRIME_CITADEL_INN", "name": "Makati Prime Citadel Inn", "address": "5007 P. Burgos Street, Poblacion, Makati City, Philippines.", "address_verification": "SUPPLIED" },
+    { "key": "MAKATI_PRIME_TOWER", "name": "Makati Prime Tower", "address": "Kalayaan Avenue at P. Burgos Street, Poblacion, Makati City, Philippines.", "address_verification": "SUPPLIED_NOT_EXTERNALLY_VERIFIED" }
+  ],
+  "rooms": [
+    { "display_id": "BR•02", "physical_unit_number": "1002", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": "SUNRISE", "view": "Sunrise city view", "tv_inches": 32, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "VACANT", "overrides": { "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•03", "physical_unit_number": "1003", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": "SUNSET", "view": "Sunset city view", "tv_inches": 43, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "OCCUPIED", "overrides": { "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•04", "physical_unit_number": "1004", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Executive studio", "area_m2": 42, "orientation": "SUNRISE", "view": "Sunrise city view", "tv_inches": 43, "ac_hp": 1.5, "wardrobe": "Large", "occupancy": "VACANT", "overrides": { "sofa_bed": true, "dedicated_work_desk": true, "dining_seats": 3, "kitchen": "FULL", "induction_cooker": true } },
+    { "display_id": "BR•05", "physical_unit_number": "1005", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": "SUNSET", "view": "Sunset city view", "tv_inches": 32, "ac_hp": 1.0, "wardrobe": "Large", "occupancy": "VACANT", "overrides": { "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•07", "physical_unit_number": "1007", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": null, "view": "No view; quiet room", "tv_inches": 32, "ac_hp": 1.0, "wardrobe": "Large", "occupancy": "VACANT", "overrides": { "quiet_room": true, "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•08", "physical_unit_number": "1008", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": "SUNSET", "view": "Sunset city view", "tv_inches": 43, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "VACANT", "overrides": { "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•09", "physical_unit_number": "1009", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": null, "view": "No view; quiet room", "tv_inches": 32, "ac_hp": 1.0, "wardrobe": "Large", "occupancy": "VACANT", "overrides": { "quiet_room": true, "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•10", "physical_unit_number": "1010", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 10, "room_type": "Studio", "area_m2": 24, "orientation": "SUNSET", "view": "Sunset city view", "tv_inches": 43, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "VACANT", "overrides": { "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } },
+    { "display_id": "BR•27", "physical_unit_number": "2704B", "building_key": "MAKATI_PRIME_TOWER", "floor": 27, "room_type": "Studio", "area_m2": 29, "orientation": null, "view": "Panoramic city view; orientation unspecified", "tv_inches": 43, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "OCCUPIED", "overrides": { "sofa_bed": true, "dining_work_table": true, "dining_seats": 2, "kitchen": "FULL", "induction_cooker": true } },
+    { "display_id": "BR•32", "physical_unit_number": "3208", "building_key": "MAKATI_PRIME_CITADEL_INN", "floor": 32, "room_type": "Studio", "area_m2": 31, "orientation": "SUNSET", "view": "Sunset panoramic city view", "tv_inches": 43, "ac_hp": 1.0, "wardrobe": "Standard", "occupancy": "VACANT", "overrides": { "indoor_veranda": true, "dining_work_table": true, "dining_seats": 2, "kitchen": "KITCHENETTE" } }
+  ]
+}

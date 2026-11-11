@@ -1,0 +1,10 @@
+export type DateOnly = `${number}-${number}-${number}`;
+export type RoomOccupancy = 'READY' | 'OCCUPIED' | 'RESERVED' | 'UNKNOWN';
+export type TenancyStatus = 'FUTURE' | 'ACTIVE' | 'ENDED' | 'CANCELLED';
+export type ContractStatus = 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
+export type PaymentStatus = 'DUE' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+export type UtilityCategory = 'WATER' | 'ELECTRICITY' | 'INTERNET';
+export type OperationCategory = 'MAINTENANCE' | 'HOUSEKEEPING';
+export type OperationPriority = 'NORMAL' | 'URGENT';
+export type OperationStatus = 'PENDING' | 'IN PROGRESS' | 'DONE';
+export type CalendarEventType = 'TENANCY_START' | 'TENANCY_END' | 'CONTRACT_EXPIRY' | 'PAYMENT_DUE' | 'OPERATION';

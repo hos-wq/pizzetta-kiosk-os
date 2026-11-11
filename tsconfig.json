@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "target": "ES2022", "lib": ["ESNext"], "module": "ESNext", "moduleResolution": "Bundler", "strict": true, "skipLibCheck": true, "noEmit": true, "types": ["node", "vitest/globals", "@cloudflare/workers-types"] },
+  "include": ["packages", "tests", "vitest.config.ts"]
+}

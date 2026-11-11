@@ -1,0 +1,70 @@
+export const INTENTS = ['GREETING','HM','PRICE','AVAILABILITY','VIEWING','TERMS','CONTRACT','MOVE_IN','DURATION','SPECIFIC_ROOM','QUIET','VIEW','SIZE','TOO_SMALL','TOO_DARK','NEGOTIATION','SHORT_STAY','WIFI','UTILITIES','WATER','ELECTRICITY','PETS','SMOKING','PARKING','OCCUPANCY','FURNISHED','KITCHEN','AIRCON','TV','SECURITY','BUILDING','OWNER_AGENT','PAYMENT','RESERVATION','LEGIT_SCAM','GHOSTS','COMPLAINT','LOW_CONFIDENCE','THANKS','OTHER'] as const;
+export type Intent = typeof INTENTS[number];
+export type NluEntities = { unitId?: string; moveInDate?: string; durationMonths?: number; occupancyCount?: number; priceQuestion?: boolean; preference?: 'WANTS_QUIET'|'WANTS_VIEW'|'NO_VIEW'|'TOO_SMALL'|'TOO_DARK'; objection?: 'PRICE'|'SHORT_STAY'|'OTHER' };
+export type NluResult = { normalizedText: string; intents: Intent[]; entities: NluEntities; meaningful: boolean };
+
+const monthNames: Record<string, number> = { jan:1, january:1, feb:2, february:2, mar:3, march:3, apr:4, april:4, may:5, jun:6, june:6, jul:7, july:7, aug:8, august:8, sep:9, sept:9, september:9, oct:10, october:10, nov:11, november:11, dec:12, december:12 };
+const dateOnly = (year:number, month:number, day:number) => { const value=`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`; const date=new Date(`${value}T00:00:00.000Z`); return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value ? value : undefined; };
+const extractDate = (text:string, referenceDate:Date) => {
+  const iso=text.match(/\b(\d{4})-(\d{2})-(\d{2})\b/);
+  if(iso)return dateOnly(Number(iso[1]),Number(iso[2]),Number(iso[3]));
+  if (/\btomorrow\b/.test(text)) return new Date(referenceDate.getTime()+86400000).toISOString().slice(0,10);
+  if (/\btoday\b/.test(text)) return referenceDate.toISOString().slice(0,10);
+  const named=text.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s*,?\s*(\d{4}))?\b/);
+  if (!named) return undefined;
+  return dateOnly(Number(named[3]??referenceDate.getUTCFullYear()),monthNames[named[1]],Number(named[2]));
+};
+const extractUnit = (text:string) => { const match=text.match(/\b(?:br\s*[·.\-]?\s*|room\s*)(0?\d{1,2})\b/); if(!match) return undefined; const number=Number(match[1]); return number>=1&&number<=99?`BR·${String(number).padStart(2,'0')}`:undefined; };
+const escapeRegex=(value:string)=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const includesAny=(text:string, terms:string[])=>terms.some(term=>new RegExp(`\\b${escapeRegex(term.trim()).replace(/\s+/g,'\\s+')}\\b`,'i').test(text));
+
+export const interpretMessage = (message:string, referenceDate=new Date()): NluResult => {
+  const normalizedText=message.normalize('NFKC').toLowerCase().replace(/[₱]/g,'php ').replace(/\s+/g,' ').trim().replace(/[!?]+$/g,'');
+  const intents:Intent[]=[]; const add=(intent:Intent)=>{if(!intents.includes(intent))intents.push(intent)};
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(normalizedText)) add('GREETING');
+  if (/^h+m+\b|^hmm+\b/.test(normalizedText)) add('HM');
+  if (includesAny(normalizedText,['how much','price','rent','last price','expensive','pricey','php ','₱'])) add('PRICE');
+  if (includesAny(normalizedText,['available','availability','vacant','free'])) add('AVAILABILITY');
+  if (includesAny(normalizedText,['viewing','can view','visit','see the room','see it'])) add('VIEWING');
+  if (includesAny(normalizedText,['terms','advance','deposit','pdc'])) add('TERMS');
+  if (includesAny(normalizedText,['contract','special contract'])) add('CONTRACT');
+  if (extractDate(normalizedText,referenceDate)) add('MOVE_IN');
+  if (/\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(?:month|months|mo|mos|years?)\b/.test(normalizedText)) add('DURATION');
+  const unitId=extractUnit(normalizedText); if(unitId) add('SPECIFIC_ROOM');
+  if (includesAny(normalizedText,['quiet','peaceful','quiet side'])) { add('QUIET'); }
+  if (includesAny(normalizedText,['view','balcony','panoramic'])) add('VIEW');
+  if (includesAny(normalizedText,['size','small','bigger','larger'])) add('SIZE');
+  if (includesAny(normalizedText,['too small','small for us'])) add('TOO_SMALL');
+  if (includesAny(normalizedText,['dark','too dark'])) add('TOO_DARK');
+  if (includesAny(normalizedText,['negotiable','discount','lower price','last price','expensive','too expensive','pricey'])) add('NEGOTIATION');
+  if (includesAny(normalizedText,['short stay','short-term','short term','one month','1 month','2 months'])) add('SHORT_STAY');
+  if (includesAny(normalizedText,['wifi','wi-fi','internet'])) add('WIFI');
+  if (includesAny(normalizedText,['utility','utilities','meralco','water bill'])) add('UTILITIES');
+  if (includesAny(normalizedText,['water'])) add('WATER');
+  if (includesAny(normalizedText,['electricity','electric','meralco'])) add('ELECTRICITY');
+  if (includesAny(normalizedText,['cat','cats','dog','dogs','pet','pets'])) add('PETS');
+  if (includesAny(normalizedText,['smoking','smoke','vape','vaping'])) add('SMOKING');
+  if (includesAny(normalizedText,['parking','car park'])) add('PARKING');
+  if (includesAny(normalizedText,['people','person','occupancy','occupant','occupants','resident','residents','for two','for 2'])) add('OCCUPANCY');
+  if (includesAny(normalizedText,['furnished','furniture','move-in ready'])) add('FURNISHED');
+  if (includesAny(normalizedText,['kitchen','kitchenette','induction'])) add('KITCHEN');
+  if (includesAny(normalizedText,['aircon','air-con','air conditioning','ac'])) add('AIRCON');
+  if (includesAny(normalizedText,['tv','television'])) add('TV');
+  if (includesAny(normalizedText,['security','cctv','safe'])) add('SECURITY');
+  if (includesAny(normalizedText,['building','reception','pool','gym','laundry'])) add('BUILDING');
+  if (includesAny(normalizedText,['owner','agent','direct owner'])) add('OWNER_AGENT');
+  if (includesAny(normalizedText,['pay','payment','gcash','cash','bank transfer'])) add('PAYMENT');
+  if (includesAny(normalizedText,['reserve','reservation','hold the room'])) add('RESERVATION');
+  if (includesAny(normalizedText,['legit','scam','real'])) add('LEGIT_SCAM');
+  if (includesAny(normalizedText,['ghost','ghosts','haunted'])) add('GHOSTS');
+  if (includesAny(normalizedText,['complaint','complain','problem'])) add('COMPLAINT');
+  if (includesAny(normalizedText,['thanks','thank you','salamat'])) add('THANKS');
+  const durationMatch=normalizedText.match(/\b(\d+)\s*(?:month|months|mo|mos)\b/); const wordDuration=normalizedText.match(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\s+months?\b/); const words:Record<string,number>={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10};
+  const occupancyMatch=normalizedText.match(/\b(\d+)\s*(?:people|person|pax|occupants?|residents?)\b/)??normalizedText.match(/\bfor\s+(\d+)\b(?!\s*(?:months?|mos?|years?)\b)/);
+  const yearMatch=normalizedText.match(/\b(\d+|one|a)\s+years?\b/);
+  const noView=/(?:no|without|dont want|don't want|do not want)\s+(?:a\s+)?view\b/.test(normalizedText);
+  const entities:NluEntities={unitId,moveInDate:extractDate(normalizedText,referenceDate),durationMonths:durationMatch?Number(durationMatch[1]):wordDuration?words[wordDuration[1]]:yearMatch?(yearMatch[1]==='one'||yearMatch[1]==='a'?1:Number(yearMatch[1]))*12:undefined,occupancyCount:occupancyMatch?Number(occupancyMatch[1]):undefined,priceQuestion:intents.includes('PRICE'),preference:intents.includes('QUIET')?'WANTS_QUIET':intents.includes('TOO_SMALL')?'TOO_SMALL':intents.includes('TOO_DARK')?'TOO_DARK':noView?'NO_VIEW':intents.includes('VIEW')?'WANTS_VIEW':undefined,objection:intents.includes('NEGOTIATION')?'PRICE':intents.includes('SHORT_STAY')?'SHORT_STAY':undefined};
+  if(intents.length===0) { add('LOW_CONFIDENCE'); add('OTHER'); }
+  const meaningful=intents.some(intent=>!['HM','OTHER','THANKS','LOW_CONFIDENCE'].includes(intent));
+  return {normalizedText,intents,entities,meaningful};
+};

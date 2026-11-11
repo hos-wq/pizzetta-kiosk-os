@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["version", "effective_date", "timezone", "currency", "people", "tenancies", "utility_configs", "utility_rates", "dues_rates", "condo_billable_areas", "pricing_target", "internet_plans", "internet_equipment", "internet_subscriptions", "policies"],
+  "properties": {
+    "version": { "const": "br-os-operational.v1" },
+    "effective_date": { "const": "2026-10-15" },
+    "timezone": { "const": "Asia/Manila" },
+    "currency": { "const": "PHP" },
+    "people": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["id", "display_name", "unit_id", "contacts"] } },
+    "tenancies": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["id", "person_id", "unit_id", "contracts", "financial_facts", "document_requirements"] } },
+    "utility_configs": { "type": "array", "minItems": 4, "items": { "type": "object", "required": ["id", "building_id", "utility_type", "payer", "provenance"] } },
+    "utility_rates": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["id", "building_id", "utility_type", "rate_centavos", "unit", "currency_code"] } },
+    "dues_rates": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["id", "building_id", "rate_centavos_per_sqm", "effective_from"] } },
+    "condo_billable_areas": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "type": "object", "required": ["unit_id", "condo_billable_area_sqm", "source"], "properties": { "condo_billable_area_sqm": { "type": ["number", "null"], "exclusiveMinimum": 0 } } } },
+    "pricing_target": { "type": "object", "required": ["target_type", "amount_centavos", "effective_from"] },
+    "internet_plans": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["id", "building_id", "plan_name", "monthly_fee_centavos", "payment_responsibility", "effective_from"] } },
+    "internet_equipment": { "type": "array", "items": { "type": "object", "required": ["id", "unit_id", "equipment_type"] } },
+    "internet_subscriptions": { "type": "array", "items": { "type": "object", "required": ["id", "tenancy_id", "plan_id", "subscription_status", "activation_status", "payment_status", "monthly_fee_centavos"] } },
+    "policies": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["id", "policy_key", "value", "provenance"] } }
+  }
+}

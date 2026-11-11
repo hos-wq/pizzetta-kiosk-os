@@ -1,0 +1,10 @@
+ALTER TABLE maintenance_issues ADD COLUMN service_type TEXT NOT NULL DEFAULT 'MAINTENANCE' CHECK (service_type IN ('MAINTENANCE','HOUSEKEEPING'));
+ALTER TABLE maintenance_issues ADD COLUMN object_key TEXT NOT NULL DEFAULT 'legacy-object';
+ALTER TABLE maintenance_issues ADD COLUMN action_key TEXT NOT NULL DEFAULT 'legacy-action';
+ALTER TABLE maintenance_issues ADD COLUMN object_snapshot TEXT NOT NULL DEFAULT 'Legacy task';
+ALTER TABLE maintenance_issues ADD COLUMN action_snapshot TEXT NOT NULL DEFAULT 'Review';
+ALTER TABLE maintenance_issues ADD COLUMN assigned_to TEXT;
+ALTER TABLE maintenance_issues ADD COLUMN scheduled_at TEXT;
+ALTER TABLE maintenance_issues ADD COLUMN notes TEXT;
+CREATE INDEX IF NOT EXISTS idx_service_tasks_type_status ON maintenance_issues(service_type,status,priority,updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_service_tasks_unit ON maintenance_issues(unit_id,service_type,status);

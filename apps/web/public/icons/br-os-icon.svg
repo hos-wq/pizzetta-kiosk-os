@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="116" fill="#3A261B"/>
+  <circle cx="256" cy="236" r="165" fill="none" stroke="#E6B15D" stroke-width="4"/>
+  <text x="256" y="270" text-anchor="middle" fill="#FAF6EE" font-family="Georgia, 'Times New Roman', serif" font-size="172" letter-spacing="-14">BR</text>
+  <path d="M185 322h142" stroke="#E6B15D" stroke-width="4"/>
+  <text x="256" y="367" text-anchor="middle" fill="#E6B15D" font-family="Arial, sans-serif" font-size="38" letter-spacing="14">OS</text>
+</svg>

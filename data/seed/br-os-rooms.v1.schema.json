@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "effective_date", "shared_amenities", "buildings", "rooms"],
+  "properties": {
+    "schema_version": { "const": "br-os-rooms.v1" },
+    "effective_date": { "type": "string", "format": "date" },
+    "shared_amenities": { "type": "object", "required": ["balcony", "bed", "smart_tv", "air_conditioner"] },
+    "buildings": { "type": "array", "minItems": 2, "items": { "type": "object", "required": ["key", "name", "address", "address_verification"] } },
+    "rooms": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "type": "object", "required": ["display_id", "physical_unit_number", "building_key", "floor", "room_type", "area_m2", "view", "tv_inches", "ac_hp", "wardrobe", "occupancy", "overrides"], "properties": { "display_id": { "enum": ["BR•02", "BR•03", "BR•04", "BR•05", "BR•07", "BR•08", "BR•09", "BR•10", "BR•27", "BR•32"] }, "occupancy": { "enum": ["VACANT", "OCCUPIED"] }, "floor": { "type": "integer", "minimum": 1 }, "area_m2": { "type": "number", "exclusiveMinimum": 0 }, "tv_inches": { "type": "integer", "minimum": 1 }, "ac_hp": { "type": "number", "exclusiveMinimum": 0 } } } }
+  }
+}
