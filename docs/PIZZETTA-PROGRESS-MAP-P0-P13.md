@@ -7,11 +7,11 @@ Legend: `DONE` complete · `WIP` in progress · `NEXT` next delivery slice · `B
 
 ```text
 P0  P1  P2  P3  P4  P5  P6  P7  P8  P9  P10 P11 P12 P13
-██  ▣   ██  ▣   ░   ▣   ▣   ██  ▣   ▣   ▣   ▣   ▣   ▣
-DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
+██  ▣   ██  ▣   ▣   ▣   ▣   ██  ▣   ▣   ▣   ▣   ▣   ▣
+DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 ```
 
-**Overall:** 4 phases complete · 10 phases active or remaining · current implementation gate: **P3/P8 order-request workflow**.
+**Overall:** 4 phases complete · 10 phases active or remaining · current implementation gate: **P6/P8 loyalty, payment-proof and order-operations completion**.
 
 ## Node and child-task map
 
@@ -71,6 +71,7 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `WIP` Request confirmation audit events
 - `DONE` Loyalty point award trigger on completed authenticated orders
 - `DONE` Authenticated loyalty read endpoint
+- `DONE` Customer loyalty card in active-order tracking
 - `WIP` Loyalty redemption and 3-point award UX
 
 ### P7 — Order state machine · `DONE`
