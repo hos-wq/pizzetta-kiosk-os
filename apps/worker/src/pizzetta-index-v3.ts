@@ -13,6 +13,7 @@ export default {
       const headers = new Headers(request.headers)
       headers.set('x-pizzetta-staff-role', String(session.role))
       headers.set('x-pizzetta-staff-id', String(session.subject_id))
+      if (env.AUTH_SESSION_SECRET) headers.set('x-pizzetta-staff-proof', env.AUTH_SESSION_SECRET)
       if (session.branch_id) headers.set('x-pizzetta-branch-id', String(session.branch_id))
       return baseWorker.fetch(new Request(request, { headers }), env)
     }
