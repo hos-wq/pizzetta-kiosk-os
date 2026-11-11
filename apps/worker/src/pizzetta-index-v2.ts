@@ -8,12 +8,13 @@ const json = (data: unknown, status = 200) => { let payload = data; let requestT
 const error = (message: string, status = 400, code = 'PIZZETTA_API_ERROR') => json({ code, message }, status)
 const body = async <T>(request: Request) => { try { return await request.json() as T } catch { throw new Error('Invalid JSON body') } }
 
-async function loyaltyBenefit(env: Env, customerId: string | undefined, subtotal: number) {
+async function loyaltyBenefit(env: Env, customerId: string | undefined, subtotal: number, lines: { item: Record<string, unknown>; label: string; price: number }[] = []) {
   if (!customerId || subtotal < 29900) return { validationNumber: null, rewardCode: null, discountCentavos: 0 }
   const row = await env.DB.prepare("SELECT COUNT(*) AS count FROM orders WHERE customer_id=? AND status='COMPLETED' AND subtotal_centavos>=29900").bind(customerId).first<{ count: number }>()
   const validationNumber = Number(row?.count ?? 0) + 1
   const rewardCode = validationNumber === 3 ? 'DISCOUNT_15' : validationNumber === 6 ? 'DISCOUNT_30' : validationNumber === 9 ? 'FREE_CLASSIC_8' : validationNumber === 12 ? 'FREE_CLASSIC_14' : null
-  const discountCentavos = rewardCode === 'DISCOUNT_15' ? Math.floor(subtotal * 0.15) : rewardCode === 'DISCOUNT_30' ? Math.floor(subtotal * 0.30) : rewardCode === 'FREE_CLASSIC_8' ? Math.min(subtotal, 9900) : rewardCode === 'FREE_CLASSIC_14' ? Math.min(subtotal, 25900) : 0
+  const freeClassic = rewardCode === 'FREE_CLASSIC_8' ? lines.find(line => line.item.category_id === 'cat-classic' && line.label === '8″') : rewardCode === 'FREE_CLASSIC_14' ? lines.find(line => line.item.category_id === 'cat-classic' && line.label === '14″') : undefined
+  const discountCentavos = rewardCode === 'DISCOUNT_15' ? Math.floor(subtotal * 0.15) : rewardCode === 'DISCOUNT_30' ? Math.floor(subtotal * 0.30) : freeClassic ? Math.min(subtotal, freeClassic.price) : 0
   return { validationNumber, rewardCode, discountCentavos }
 }
 
