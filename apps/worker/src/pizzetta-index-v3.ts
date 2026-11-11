@@ -1,11 +1,13 @@
 import baseWorker from './pizzetta-index-v2'
-import { authRoute, staffSession } from './pizzetta-auth'
+import { authRoute, passwordAuthRoute, staffSession } from './pizzetta-auth'
 
 type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const path = new URL(request.url).pathname.replace(/\/$/, '')
+    const passwordAuth = await passwordAuthRoute(request, env, path)
+    if (passwordAuth) return passwordAuth
     const auth = await authRoute(request, env, path)
     if (auth) return auth
     const session = await staffSession(request, env)

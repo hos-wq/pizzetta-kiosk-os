@@ -1,6 +1,6 @@
 import PizzettaWorldApp from './PizzettaWorldApp'
-import StaffConsole from './StaffConsole'
+import StaffAccess from './StaffAccess'
 
 export default function App() {
-  return window.location.pathname.startsWith('/staff') ? <StaffConsole /> : <PizzettaWorldApp />
+  return window.location.pathname.startsWith('/staff') ? <StaffAccess /> : <PizzettaWorldApp />
 }
