@@ -74,6 +74,7 @@ DONE WIP DONE WIP WIP WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Authenticated loyalty read endpoint
 - `DONE` Customer loyalty card in active-order tracking
 - `DONE` Three-stamp reward unlock mechanics
+- `DONE` Active-order reward availability banner
 - `WIP` Loyalty reward redemption UX
 
 ### P7 — Order state machine · `DONE`
