@@ -6,25 +6,25 @@ import { announcePizzettaEvent, enablePizzettaNotifications, registerPizzettaNot
 type Service = 'DINE_IN' | 'PICKUP'
 type Branch = { id: string; name: string; address: string; latitude: number; longitude: number; contact: string }
 type Step = 'service' | 'identity' | 'menu' | 'checkout'
-type Category = 'Popular' | 'Classic' | 'Signature' | 'Thin crust' | 'Salads' | 'Spaghetti' | 'Lasagna' | 'Iced Tea' | 'Meals'
+type Category = 'Popular' | 'Classic' | 'Signature' | 'Thin Crust 10″' | 'Salads' | 'Spaghetti' | 'Lasagna' | 'Iced Tea' | 'Meals'
 type Product = { id: string; name: string; description: string; price: number; category: Category; kind: 'pizza' | 'salad' | 'pasta' | 'lasagna' | 'tea' | 'meal'; badge?: string; sizes?: string[]; ingredients?: string[]; allergens?: string[] }
 type Line = { product: Product; quantity: number; variant?: string }
 
 const pizza = (id: string, name: string, price: number, description: string, ingredients: string[], allergens: string[], category: Category, badge?: string): Product => ({ id, name, price, description, ingredients, allergens, category, kind: 'pizza', badge, sizes: ['14″'] })
 const products: Product[] = [
   pizza('margherita', 'Margherita', 259, 'Minimal, honest', ['Tomato', 'Fresh basil', 'Mozzarella', 'Olive oil'], ['Milk'], 'Classic'),
-  pizza('pepperoni', 'Pepperoni', 339, 'The classic N.Y. topping', ['Pepperoni', 'Mozzarella', 'Oregano'], ['Milk', 'Wheat'], 'Classic'),
-  pizza('hawaiian', 'Hawaiian', 319, 'Chill, sweet–salty', ['Ham', 'Sweet pineapple', 'Mozzarella', 'Oregano'], ['Milk'], 'Classic'),
   pizza('spinach-dip', 'Spinach Dip', 269, 'Party dip on pizza', ['Spinach dip base', 'Garlic butter', 'Mozzarella', 'Cracked pepper'], ['Milk', 'Wheat'], 'Classic'),
   pizza('five-cheese', '5 Cheese + Garlic', 289, 'Cheesy comfort', ['Gouda', 'Emmental', 'Parmesan', 'Cream cheese', 'Mozzarella', 'Garlic butter'], ['Milk', 'Wheat'], 'Classic'),
   pizza('vegetarian', 'Vegetarian', 319, 'The healthy choice', ['Bell pepper', 'Mushrooms', 'Olives', 'Onion', 'Basil'], ['Milk', 'Wheat'], 'Classic'),
+  pizza('pepperoni', 'Pepperoni', 339, 'The classic N.Y. topping', ['Pepperoni', 'Mozzarella', 'Oregano'], ['Milk', 'Wheat'], 'Classic'),
+  pizza('hawaiian', 'Hawaiian', 319, 'Chill, sweet–salty', ['Ham', 'Sweet pineapple', 'Mozzarella', 'Oregano'], ['Milk'], 'Classic'),
   pizza('meat-overload', 'Meat Overload', 359, 'For carnivore mode', ['Pepperoni', 'Italian sausage', 'Ham', 'Melt-in mozzarella'], ['Milk', 'Wheat'], 'Classic'),
-  pizza('chicken-masala', 'Chicken Masala', 299, 'Aromatic spicy flavor', ['Spiced chicken', 'Garam masala sauce', 'Yogurt–garlic finish'], ['Milk'], 'Signature'),
-  pizza('chorizo', 'Chorizo', 299, 'A Spanish vibe', ['Smoky chorizo bites', 'Pimiento', 'Onion', 'Mozzarella', 'Tomato sauce'], ['Milk', 'Wheat'], 'Signature'),
-  pizza('samurai', 'Samurai', 349, 'Crunchy, umami-flavor', ['Surimi', 'Bonito flakes', 'Mayo', 'Teriyaki', 'Mozzarella'], ['Fish', 'Egg', 'Milk', 'Soy'], 'Signature'),
-  pizza('chicken-suya', 'Chicken Suya', 339, 'Spicy na pizza', ['Spicy-suya glazed chicken', 'Bell pepper', 'Red onion', 'Green chilli', 'Mozzarella'], ['Milk', 'Peanut'], 'Signature'),
   pizza('pizza-corn', 'Pizza Corn', 359, 'Street-flavor na pizza', ['Garlic butter', 'Sweet corn', 'Mozzarella', 'Japanese mayo'], ['Milk', 'Egg'], 'Signature'),
   pizza('pizzalada', 'Pizzalada', 359, 'Hommie vibes', ['Crushed tomato sauce', 'Mozzarella', 'Smoked eggplant', 'Red onion', 'Fresh tomatoes', 'Salted eggs', 'Japanese mayo'], ['Milk', 'Egg'], 'Signature'),
+  pizza('chorizo', 'Chorizo', 299, 'A Spanish vibe', ['Smoky chorizo bites', 'Pimiento', 'Onion', 'Mozzarella', 'Tomato sauce'], ['Milk', 'Wheat'], 'Signature'),
+  pizza('chicken-masala', 'Chicken Masala', 299, 'Aromatic spicy flavor', ['Spiced chicken', 'Garam masala sauce', 'Yogurt–garlic finish'], ['Milk'], 'Signature'),
+  pizza('samurai', 'Samurai', 349, 'Crunchy, umami-flavor', ['Surimi', 'Bonito flakes', 'Mayo', 'Teriyaki', 'Mozzarella'], ['Fish', 'Egg', 'Milk', 'Soy'], 'Signature'),
+  pizza('chicken-suya', 'Chicken Suya', 339, 'Spicy na pizza', ['Spicy-suya glazed chicken', 'Bell pepper', 'Red onion', 'Green chilli', 'Mozzarella'], ['Milk', 'Peanut'], 'Signature'),
   { id: 'lasagna-1', name: 'Lasagna', description: 'The Italian holidays classic dish', price: 1299, category: 'Lasagna', kind: 'lasagna', badge: 'Good for 10–12 pax', ingredients: ['Pork meat sauce', 'Béchamel', 'Egg pasta', 'Mozzarella', 'Parmesan'], allergens: ['Milk', 'Egg', 'Wheat'], sizes: ['Tray · 10/12 pax'] },
   { id: 'pasta-alfredo', name: 'Alfredo with Ham & Mushroom', description: "A revisited Italian's classic", price: 999, category: 'Spaghetti', kind: 'pasta', badge: 'Good for 10–12 pax', ingredients: ['Spaghetti noodles', 'Cheese sauce', 'Ham', 'Mushroom', 'Parmesan'], allergens: ['Milk', 'Wheat'], sizes: ['Tray · 10/12 pax'] },
   { id: 'salad-kani', name: 'Kani Salad', description: 'A Japanese classic', price: 1299, category: 'Salads', kind: 'salad', badge: 'Good for 10–12 pax', ingredients: ['Romaine lettuce', 'Tomatoes', 'Onion', 'Kani', 'Sesame dressing'], allergens: ['Crustaceans', 'Egg', 'Sesame'], sizes: ['Tray · 10/12 pax'] },
@@ -41,7 +41,7 @@ const branches: Branch[] = [
   { id: 'branch-antipolo', name: 'Pizzetta Antipolo', address: 'Lot 4E, ASM Building, Sitio Halang, Antipolo, 1870 Rizal', latitude: 14.5846, longitude: 121.1765, contact: '0917 310 0705' },
   { id: 'branch-bf-homes', name: 'Pizzetta BF Homes', address: 'BF Homes, South Food Hub, Caltex, Elizalde corner President’s Ave, Parañaque, 1720 Metro Manila', latitude: 14.4635, longitude: 121.0268, contact: '0956 075 1463' },
 ]
-const categories: Category[] = ['Popular', 'Classic', 'Signature', 'Thin crust', 'Salads', 'Spaghetti', 'Lasagna', 'Iced Tea', 'Meals']
+const categories: Category[] = ['Popular', 'Classic', 'Signature', 'Thin Crust 10″', 'Salads', 'Spaghetti', 'Lasagna', 'Iced Tea', 'Meals']
 const peso = (value: number) => `₱${value.toFixed(2)}`
 
 function Glyph({ kind }: { kind: Product['kind'] | 'menu' }) { const paths: Record<string, string> = { pizza: 'M4 20 12 4c5 3 8 8 8 16H4Zm6-5h.01M14 11h.01M16 16h.01', salad: 'M4 14c0 4 3 6 8 6s8-2 8-6H4Zm2-3c2-4 10-4 12 0', pasta: 'M5 5h14M8 5v5c0 4 8 4 8 0V5M6 20h12', lasagna: 'M4 7h16l-2 13H6L4 7Zm2-3h12', tea: 'M7 4h10v10a5 5 0 0 1-10 0V4Zm10 3h2a3 3 0 0 1 0 6h-2', meal: 'M4 5h16M6 5v14h12V5M9 9h6M9 13h6', menu: 'M4 6h16M4 12h16M4 18h16' }; return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[kind].split(/(?=M)/).map((path, index) => <path key={index} d={path} />)}</svg> }

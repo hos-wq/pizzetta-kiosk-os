@@ -24,7 +24,7 @@ Modello minimo: filiale, SKU/variante e disponibilità per sede; capacità tavol
 
 ## P1 — Catalogo di riferimento
 
-Categorie: PIZZA, KITCHEN, BREWED ICED TEA. I prezzi 14″ e tray vengono dall’immagine del menu. I prezzi 8″ e le due pizze Thin Crust 10″ vengono dal listino fornito dall’owner. KITCHEN qui documenta solo tray da 10–12 pax. L’immagine e il listino non includono tè, porzioni singole o bundle: tenere fuori dal catalogo confermato finché non c’è una fonte per composizione, formato e prezzo; nessun prezzo inventato.
+Categorie: Classics, Signature, Thin Crust 10″, KITCHEN e BREWED ICED TEA. L’ordine canonico della pizza è Classics — Margherita, Spinach Dip, 5 Cheese + Garlic, Vegetarian, Pepperoni, Hawaiian, Meat Overload. Signature — Pizza Corn, Pizzalada, Chorizo, Chicken Masala, Samurai, Chicken Suya. Thin Crust 10″ — Cheese Sticks, Choco Glaze. I prezzi 14″ e tray vengono dall’immagine del menu. I prezzi 8″ e le due pizze Thin Crust 10″ vengono dal listino fornito dall’owner. KITCHEN qui documenta solo tray da 10–12 pax. L’immagine e il listino non includono tè, porzioni singole o bundle: tenere fuori dal catalogo confermato finché non c’è una fonte per composizione, formato e prezzo; nessun prezzo inventato.
 
 | Prodotto | Formato / ₱ | Composizione riportata | Segnali allergeni dal testo |
 |---|---:|---|---|
