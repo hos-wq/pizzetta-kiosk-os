@@ -126,8 +126,9 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Branch pause/resume
 - `DONE` Wait-time +/- controls
 - `DONE` Staff queue polling and notifications
-- `WIP` Request confirmation operations
-- `NEXT` Audit dashboard, alerts and incident runbook
+- `DONE` Request confirmation operations
+- `DONE` Incident runbook
+- `NEXT` Audit dashboard and alerts
 
 ## Current critical path
 
