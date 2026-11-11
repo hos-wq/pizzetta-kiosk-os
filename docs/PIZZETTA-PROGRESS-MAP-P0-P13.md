@@ -69,7 +69,8 @@ DONE WIP DONE WIP NEXT WIP WIP DONE WIP WIP WIP WIP WIP WIP
 - `DONE` Payment proof table
 - `DONE` `order_requests` boundary
 - `WIP` Request confirmation audit events
-- `NEXT` Customer loyalty ledger integration
+- `DONE` Loyalty point award trigger on completed authenticated orders
+- `WIP` Loyalty redemption and 3-point award UX
 
 ### P7 — Order state machine · `DONE`
 
