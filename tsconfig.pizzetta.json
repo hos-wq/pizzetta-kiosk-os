@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node", "@cloudflare/workers-types"]
+  },
+  "include": [
+    "apps/worker/src/pizzetta-auth.ts",
+    "apps/worker/src/pizzetta-index.ts",
+    "apps/worker/src/pizzetta-index-v2.ts",
+    "apps/worker/src/pizzetta-index-v3.ts"
+  ]
+}

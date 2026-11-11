@@ -8,11 +8,11 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.pizzetta.json --noEmit",
     "build": "npm --prefix apps/web run build",
     "lint": "npm --prefix apps/web run lint",
     "worker-build": "wrangler deploy --dry-run",
-    "worker-typecheck": "tsc -p tsconfig.json --noEmit"
+    "worker-typecheck": "tsc -p tsconfig.pizzetta.json --noEmit"
   },
   "keywords": [],
   "author": "",

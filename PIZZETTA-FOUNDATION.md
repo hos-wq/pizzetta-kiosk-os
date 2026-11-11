@@ -1,13 +1,21 @@
 # PIZZETTA — Foundation Setup
 
-This project is a restaurant ordering system built from the reusable foundation of `D:\Boutique rooms\boutique-rooms-os`.
+Pizzetta Kiosk is a standalone restaurant ordering and operations system. The active build contains only Pizzetta customer, staff, menu, branch, order and loyalty behavior.
 
-## Current state
+Legacy material is retained only under `legacy-reference/archive/` for historical traceability. It is not an application dependency, test target, deployment input or data source.
 
-- The BR OS repository structure has been copied into this directory.
-- Source control metadata, installed dependencies, Wrangler state, and local environment secrets were intentionally left out.
-- Existing PIZZETTA planning and visual reference files were preserved.
-- The copied BR OS code is a starting foundation; rental-specific domain behavior is not yet considered restaurant behavior.
+## Active boundaries
+
+- Customer WAP/PWA: `apps/web/src/PizzettaWorldApp.tsx`
+- Staff WAP: `apps/web/src/StaffAccess.tsx` and `apps/web/src/StaffConsole.tsx`
+- Worker entrypoint: `apps/worker/src/pizzetta-index-v3.ts`
+- Pizzetta migrations: `db/pizzetta-migrations/`
+- Pizzetta public assets: `apps/web/public/`
+- Pizzetta configuration: `wrangler.toml`
+
+## P0 rule
+
+No active source, test, build script, migration or deployment configuration may import, execute or reference another product. Any historical material belongs in `legacy-reference/archive/` and must never be added to the active dependency graph.
 
 ## Reuse first
 
@@ -21,7 +29,7 @@ This project is a restaurant ordering system built from the reusable foundation 
 
 - Rental/property pages and terminology.
 - Room, tenant, maintenance, tenancy, utilities, and rental finance domains.
-- BR OS colors, typography, imagery, and brand voice.
+- Any previous property-brand colors, typography, imagery, and voice.
 - Navigation and page composition.
 - Authentication and roles, after restaurant staff and management roles are defined.
 
