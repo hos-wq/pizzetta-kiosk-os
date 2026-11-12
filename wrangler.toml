@@ -23,3 +23,11 @@ binding = "DB"
 database_name = "pizzetta-kiosk-os"
 database_id = "5b442bf4-52e1-4677-b712-04a51e8dec6a"
 migrations_dir = "db/pizzetta-migrations"
+
+[[durable_objects.bindings]]
+name = "PIZZETTA_REALTIME"
+class_name = "PizzettaRealtime"
+
+[[migrations]]
+tag = "realtime-v1"
+new_sqlite_classes = ["PizzettaRealtime"]

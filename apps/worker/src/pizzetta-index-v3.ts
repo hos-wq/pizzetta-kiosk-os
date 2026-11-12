@@ -2,8 +2,9 @@ import baseWorker from './pizzetta-index-v2'
 import { authRoute, passwordAuthRoute, staffSession } from './pizzetta-auth'
 import { orderRequestSchema } from '../../../packages/contracts/src/index'
 import { chooseBranch, type AssignmentCandidate } from './pizzetta-assignment'
+export { PizzettaRealtime } from './pizzetta-realtime'
 
-type Env = { DB: D1Database; ASSETS: Fetcher; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
+type Env = { DB: D1Database; ASSETS: Fetcher; PIZZETTA_REALTIME: DurableObjectNamespace; ENVIRONMENT?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; META_APP_ID?: string; META_APP_SECRET?: string; META_GRAPH_VERSION?: string; PUBLIC_ORIGIN?: string; AUTH_SESSION_SECRET?: string }
 
 const customerCookie = (request: Request) => request.headers.get('cookie')?.split(';').map(value => value.trim()).find(value => value.startsWith('pizzetta_session='))?.slice('pizzetta_session='.length) ?? null
 const digestValue = async (value: string) => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value)))).map(byte => byte.toString(16).padStart(2, '0')).join('')
@@ -35,6 +36,52 @@ async function assignOrderBranch(request: Request, env: Env): Promise<Request | 
   return new Request(request, { headers, body: JSON.stringify(payload) })
 }
 
+async function realtimeRoute(request: Request, env: Env, path: string): Promise<Response | null> {
+  const match = path.match(/^\/api\/realtime\/(branch|request|order)\/([^/]+)$/)
+  if (!match || request.method !== 'GET' || request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return null
+  const key = decodeURIComponent(match[2])
+  if (match[1] === 'branch') {
+    const session = await staffSession(request, env)
+    if (!session || (session.role !== 'ADMIN' && session.branch_id !== key)) return new Response('Staff session required', { status: 401 })
+  } else {
+    const accessToken = request.headers.get('cookie')?.match(/(?:^|;\s*)pz_request_token=([^;]+)/)?.[1]
+    if (!accessToken || accessToken.length < 16) return new Response('Order access token required', { status: 401 })
+    const tokenHash = await digestValue(accessToken)
+    const table = match[1] === 'request' ? 'order_requests' : 'orders'
+    const found = await env.DB.prepare(`SELECT id FROM ${table} WHERE id=? AND ${table === 'order_requests' ? 'request_access_token_hash' : 'access_token_hash'}=?`).bind(key, tokenHash).first()
+    if (!found) return new Response('Order access denied', { status: 403 })
+  }
+  const channel = `${match[1]}:${key}`
+  const id = env.PIZZETTA_REALTIME.idFromName(channel)
+  return env.PIZZETTA_REALTIME.get(id).fetch(new Request(`https://pizzetta-realtime/connect?channel=${encodeURIComponent(channel)}`, request))
+}
+
+async function publishRealtime(env: Env, channel: string, type: string, payload: unknown) {
+  const id = env.PIZZETTA_REALTIME.idFromName(channel)
+  await env.PIZZETTA_REALTIME.get(id).fetch('https://pizzetta-realtime/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ type, channel, at: new Date().toISOString(), payload }) })
+}
+
+async function publishMutation(env: Env, path: string, response: Response) {
+  if (!response.ok) return
+  const payload = await response.clone().json().catch(() => null) as { data?: Record<string, unknown> } | null
+  const data = payload?.data ?? {}
+  const requestMatch = path.match(/^\/api\/staff\/order-requests\/([^/]+)\/confirm$/)
+  const statusMatch = path.match(/^\/api\/staff\/orders\/([^/]+)\/status$/)
+  const operationMatch = path.match(/^\/api\/staff\/branches\/([^/]+)\/operations$/)
+  const requestId = requestMatch?.[1] ?? (path === '/api/order-requests' ? String(data.id ?? '') : '')
+  const orderId = statusMatch?.[1] ?? String(data.id ?? '')
+  let branchId = typeof data.branch_id === 'string' ? data.branch_id : null
+  if (requestId) branchId = (await env.DB.prepare('SELECT branch_id FROM order_requests WHERE id=?').bind(requestId).first<{ branch_id: string }>())?.branch_id ?? branchId
+  if (orderId && !branchId) branchId = (await env.DB.prepare('SELECT branch_id FROM orders WHERE id=?').bind(orderId).first<{ branch_id: string }>())?.branch_id ?? null
+  if (operationMatch) branchId = operationMatch[1]
+  const type = path === '/api/order-requests' ? 'ORDER_REQUEST_SUBMITTED' : requestMatch ? 'ORDER_REQUEST_CONFIRMED' : statusMatch ? 'ORDER_STATUS_CHANGED' : operationMatch ? 'BRANCH_OPERATIONS_CHANGED' : null
+  if (!type) return
+  const event = { request_id: requestId || undefined, order_id: orderId || undefined, branch_id: branchId ?? undefined, status: data.status }
+  if (branchId) await publishRealtime(env, `branch:${branchId}`, type, event)
+  if (requestId) await publishRealtime(env, `request:${requestId}`, type, event)
+  if (orderId) await publishRealtime(env, `order:${orderId}`, type, event)
+}
+
 async function appShell(request: Request, env: Env, manifest: '/manifest-client.webmanifest' | '/manifest-restaurant.webmanifest') {
   const response = await env.ASSETS.fetch(new Request(new URL('/', request.url), request))
   const html = await response.text()
@@ -48,6 +95,8 @@ async function appShell(request: Request, env: Env, manifest: '/manifest-client.
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const path = new URL(request.url).pathname.replace(/\/$/, '')
+    const realtime = await realtimeRoute(request, env, path)
+    if (realtime) return realtime
     if (request.method === 'GET' && path === '/client') return appShell(request, env, '/manifest-client.webmanifest')
     if (request.method === 'GET' && (path === '/restaurant' || path === '/staff')) return appShell(request, env, '/manifest-restaurant.webmanifest')
     if (request.method === 'GET' && path === '/privacy') return env.ASSETS.fetch(new Request(new URL('/privacy.html', request.url), request))
@@ -71,8 +120,12 @@ export default {
       headers.set('x-pizzetta-staff-id', String(session.subject_id))
       if (env.AUTH_SESSION_SECRET) headers.set('x-pizzetta-staff-proof', env.AUTH_SESSION_SECRET)
       if (session.branch_id) headers.set('x-pizzetta-branch-id', String(session.branch_id))
-      return baseWorker.fetch(new Request(request, { headers }), env)
+      const response = await baseWorker.fetch(new Request(request, { headers }), env)
+      void publishMutation(env, path, response)
+      return response
     }
-    return baseWorker.fetch(request, env)
+    const response = await baseWorker.fetch(request, env)
+    void publishMutation(env, path, response)
+    return response
   },
 }

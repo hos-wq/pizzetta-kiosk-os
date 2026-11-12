@@ -3,6 +3,7 @@ import { Pause, Play, Plus, Minus, RefreshCw, Check, LogOut } from 'lucide-react
 import './PizzettaWorld.css'
 import { announcePizzettaEvent, setPizzettaBadge } from './pizzetta-notifications'
 import type { StaffSession } from './StaffAccess'
+import { connectPizzettaRealtime } from './pizzetta-realtime'
 
 type QueueOrder = { id: string; order_number: string; status: string; service_mode: string; payment_method: string; payment_status: string; total_centavos: number; version: number; prep_eta_at?: string; created_at: string }
 type OrderRequest = { id: string; request_number: string; customer_name: string; whatsapp: string; service_mode: string; payment_method: string; receipt_json: string; created_at: string }
@@ -40,7 +41,7 @@ export default function StaffConsole({ session }: { session: StaffSession }) {
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Unable to load queue') } finally { setLoading(false) }
   }
 
-  useEffect(() => { firstQueue.current = true; void refresh(); const timer = window.setInterval(() => void refresh(), 10000); return () => window.clearInterval(timer) }, [branch])
+  useEffect(() => { firstQueue.current = true; void refresh(); const timer = window.setInterval(() => void refresh(), 10000); if (!branch) return () => window.clearInterval(timer); const disconnect = connectPizzettaRealtime('branch', branch, () => void refresh()); return () => { window.clearInterval(timer); disconnect() } }, [branch])
 
   const operation = async (patch: { paused?: boolean; waitDelta?: number }) => {
     if (!canOperate) return
